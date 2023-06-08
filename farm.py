@@ -2,73 +2,26 @@ import pydirectinput
 from time import sleep, time
 import os
 import json
-import cv2
 import sys
-import pytesseract
 from PIL import ImageGrab
 
 works = True
-try:
-    pytesseract.pytesseract.tesseract_cmd = r'C:\\Users\\John Montgomery\\AppData\\Local\\Programs\\Tesseract-OCR\\tesseract.exe'
-except Exception as err:
-    print("ERROR: ", err)
-    works = False
-    pass
-
-rune_coords = [1720,1020,1865,1050]
-current_runes = 0
 def main():
     
     initializepydirectinput()
     countdownTimer()
-    flag = False
     #TODO print out how many souls farmed each time
-    starting_runes = 0
-    try:
-        starting_runes = int(grabRunes(rune_coords))
-    except Exception as err:
-        print("ERROR: ", err)
-        pass
-    total_farmed = 0
-    old = 0
-    if works:
-        print("Starting farm, starting runes: {}\n".format(starting_runes), flush=True)
     start_time = time()
     for i in range(50):
-        # playActions("test9.json")
-        # playActions("farm2.json")
         playActions("farm3.json")
         sleep(6.75)
-        current_runes = 0
-        try:
-            current_runes = int(float(grabRunes(rune_coords))) 
-            current_runes -= total_farmed + starting_runes
-        except Exception as err:
-            print("ERROR: ", err)
-            pass
-        total_farmed += current_runes
-        if total_farmed <= old :
-            flag = True
-            break
-        old = total_farmed
         sleep(1)
-
-        print("Farmed {} time(s).".format(i + 1), flush=True)
-        if works:
-            print("Just farmed: {} runes".format(current_runes), flush=True)
-            print("Total farmed: {} runes".format(total_farmed), flush=True)
         minutes = (time() - start_time) // 60
         seconds = (time() - start_time) % 60
         print("Time elapsed: {} minutes and {:.2f} seconds\n".format(minutes, seconds), flush=True)
     print("Done", flush=True)
-
     minutes = (time() - start_time) // 60
     seconds = (time() - start_time) % 60
-    if works:
-        print("Farmed {} runes in {} minutes and {:.2f} seconds. {} runes per hour."
-            .format(total_farmed, round(minutes), seconds, runesPerHour(total_farmed, (time() - start_time))), flush=True)
-    if flag:
-        print("Something broke on iteration {}".format(i), flush=True)
 
 def runesPerHour(runes, time):
     per_second = runes/time
