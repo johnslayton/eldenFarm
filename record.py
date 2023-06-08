@@ -1,5 +1,5 @@
 from pynput import mouse, keyboard
-from time import time
+from time import time, sleep
 import json
 import os
 
@@ -17,6 +17,8 @@ class EventType():
     CLICK = 'click'
 
 def main():
+    print("Wait")
+    sleep(3)
     print("Go")
     runListeners()
     print("Recording duration: {} seconds".format(elapsed_time()))
