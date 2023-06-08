@@ -1,4 +1,4 @@
-import pyautogui
+import pydirectinput
 from time import sleep, time
 import os
 import json
@@ -6,20 +6,20 @@ import json
 
 def main():
     
-    initializePyAutoGUI()
+    initializepydirectinput()
     countdownTimer()
 
-    # playActions("test-1.json")
-    playActions("test0.json")
-    sleep(1.00)
+    #TODO print out how many souls farmed each time
+    for i in range(1, 10):
+        print("Farmed {} times.".format(i))
     print("Done")
 
 
-def initializePyAutoGUI():
-    # Initialized PyAutoGUI
-    # https://pyautogui.readthedocs.io/en/latest/introduction.html
+def initializepydirectinput():
+    # Initialized pydirectinput
+    # https://pydirectinput.readthedocs.io/en/latest/introduction.html
     # When fail-safe mode is True, moving the mouse to the upper-left corner will abort your program.
-    pyautogui.FAILSAFE = True
+    pydirectinput.FAILSAFE = True
 
 
 def countdownTimer():
@@ -56,15 +56,15 @@ def playActions(filename):
             # perform the action
             if action['type'] == 'keyDown':
                 key = convertKey(action['button'])
-                pyautogui.keyDown(key)
-                print("keyDown on {}".format(key))
+                pydirectinput.keyDown(key)
+                # print("keyDown on {}".format(key))
             elif action['type'] == 'keyUp':
                 key = convertKey(action['button'])
-                pyautogui.keyUp(key)
-                print("keyUp on {}".format(key))
+                pydirectinput.keyUp(key)
+                # print("keyUp on {}".format(key))
             elif action['type'] == 'click':
-                pyautogui.click(action['pos'][0], action['pos'][1], duration=0.25)
-                print("click on {}".format(action['pos']))
+                pydirectinput.click(action['pos'][0], action['pos'][1], duration=0.25)
+                # print("click on {}".format(action['pos']))
 
             # then sleep until next action should occur
             try:
@@ -86,9 +86,9 @@ def playActions(filename):
             sleep(elapsed_time)
 
 
-# convert pynput button keys into pyautogui keys
+# convert pynput button keys into pydirectinput keys
 # https://pynput.readthedocs.io/en/latest/_modules/pynput/keyboard/_base.html#Key
-# https://pyautogui.readthedocs.io/en/latest/keyboard.html
+# https://pydirectinput.readthedocs.io/en/latest/keyboard.html
 def convertKey(button):
     PYNPUT_SPECIAL_CASE_MAP = {
         'alt_l': 'altleft',

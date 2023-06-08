@@ -4,7 +4,7 @@ import json
 import os
 
 # Fields
-OUTPUT_FILENAME = 'test'
+OUTPUT_FILENAME = 'script'
 mouse_listener = None
 start_time = None
 unreleased_keys = [] # use set here
@@ -23,7 +23,7 @@ def main():
     runListeners()
     print("Recording duration: {} seconds".format(elapsed_time()))
     global input_events
-    print(json.dumps(input_events))
+    # print(json.dumps(input_events))
 
     script_dir = os.path.dirname(__file__)
     # next recording
@@ -38,7 +38,7 @@ def main():
         '{}{}.json'.format(OUTPUT_FILENAME, str(i))
     )
     with open(filepath, 'w') as outfile:
-        json.dump(input_events, outfile, indent=4)
+        json.dump(input_events[: len(input_events) - 2], outfile, indent=4)
 
         
 def elapsed_time():
