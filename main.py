@@ -1,5 +1,6 @@
-import pyautogui as pag
 import time
+
+import pyautogui as pag
 
 # could use pag.locateonscreen or opencv, 
 # which allows for confidence on if image is there
