@@ -2,17 +2,66 @@ import pydirectinput
 from time import sleep, time
 import os
 import json
+import cv2
+import pytesseract
+import pyscreenshot as ImageGrab
+pytesseract.pytesseract.tesseract_cmd = r'C:\\Users\\John Montgomery\\AppData\\Local\\Programs\\Tesseract-OCR\\tesseract.exe'
 
-
+rune_coords = [1720,1020,1865,1050]
+current_runes = 0
 def main():
     
     initializepydirectinput()
     countdownTimer()
-
+    flag = False
     #TODO print out how many souls farmed each time
-    for i in range(1, 10):
-        print("Farmed {} times.".format(i))
+    starting_runes = 0
+    try:
+        starting_runes = int(grabRunes(rune_coords))
+    except:
+        pass
+    total_farmed = 0
+    old = 0
+    print("Starting farm, starting runes: {}\n".format(starting_runes))
+    start_time = time()
+    for i in range(21):
+        # playActions("test9.json")
+        # playActions("farm2.json")
+        playActions("farm3.json")
+        sleep(6.75)
+        current_runes = 0
+        try:
+            current_runes = int(float(grabRunes(rune_coords))) 
+            current_runes -= total_farmed + starting_runes
+        except Exception as err:
+            print("ERROR: ", err)
+            pass
+        total_farmed += current_runes
+        if total_farmed <= old :
+            flag = True
+            break
+        old = total_farmed
+        sleep(1)
+
+        print("Farmed {} time(s).".format(i + 1))
+        print("Just farmed: {} runes".format(current_runes))
+        print("Total farmed: {} runes".format(total_farmed))
+        minutes = (time() - start_time) // 60
+        seconds = (time() - start_time) % 60
+        print("Time elapsed: {} minutes and {:.2f} seconds\n".format(minutes, seconds))
     print("Done")
+
+    minutes = (time() - start_time) // 60
+    seconds = (time() - start_time) % 60
+    print("Farmed {} runes in {} minutes and {:.2f} seconds. {} runes per hour."
+          .format(total_farmed, round(minutes), seconds, runesPerHour(total_farmed, (time() - start_time))))
+    if flag:
+        "Something broke on iteration {}".format(i)
+
+def runesPerHour(runes, time):
+    per_second = runes/time
+    per_hour = (per_second * 60 * 60)
+    return per_hour
 
 
 def initializepydirectinput():
@@ -27,8 +76,22 @@ def countdownTimer():
     print("Starting", end="", flush=True)
     for i in range(0, 10):
         print(".", end="", flush=True)
-        sleep(1)
+        sleep(.5)
     print("Go")
+
+
+def grabRunes(coords):
+    im=ImageGrab.grab(bbox=(coords[0],coords[1],coords[2],coords[3]))
+    # im.show()
+
+    # to file
+    im.save('images\\runes.png')
+
+    img = cv2.imread('images\\runes.png')
+
+    text = pytesseract.image_to_string(img, config='--psm 6')
+    # print(text)
+    return text
 
 
 def playActions(filename):
@@ -82,7 +145,7 @@ def playActions(filename):
             elapsed_time -= (time() - action_start_time)
             if elapsed_time < 0:
                 elapsed_time = 0
-            print('sleeping for {}'.format(elapsed_time))
+            # print('sleeping for {}'.format(elapsed_time))
             sleep(elapsed_time)
 
 
