@@ -23,15 +23,8 @@ def main():
     minutes = (time() - start_time) // 60
     seconds = (time() - start_time) % 60
 
-def runesPerHour(runes, time):
-    per_second = runes/time
-    per_hour = (per_second * 60 * 60)
-    return per_hour
-
 
 def initializepydirectinput():
-    # Initialized pydirectinput
-    # https://pydirectinput.readthedocs.io/en/latest/introduction.html
     # When fail-safe mode is True, moving the mouse to the upper-left corner will abort your program.
     pydirectinput.FAILSAFE = True
 
@@ -44,18 +37,6 @@ def countdownTimer():
         sleep(.5)
     print("Go")
 
-
-def grabRunes(coords):
-    im=ImageGrab.grab(bbox=(coords[0],coords[1],coords[2],coords[3]))
-    # im.show()
-
-    # to file
-    im.save('images\\runes.png')
-
-    img = cv2.imread('images\\runes.png')
-
-    text = pytesseract.image_to_string(img, config='--psm 6')
-    return text
 
 
 def playActions(filename):
