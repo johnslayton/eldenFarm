@@ -34,7 +34,7 @@ def main():
     if works:
         print("Starting farm, starting runes: {}\n".format(starting_runes), flush=True)
     start_time = time()
-    for i in range(50):
+    for i in range(3):
         # playActions("test9.json")
         # playActions("farm2.json")
         playActions("farm3.json")
